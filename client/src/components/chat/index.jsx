@@ -1,19 +1,22 @@
 import React from "react";
 import {
   useMultiChatLogic,
-  MultiChatWindow,
   MultiChatSocket,
+  MultiChatWindow,
 } from "react-chat-engine-advanced";
 import Header from "@/components/customHeader";
 import StandardMessageForm from "@/components/CustomMessageForms/StandardMessageForm";
-import Ai from "../CustomMessageForms/Ai";
+import Ai from "@/components/CustomMessageForms/Ai";
+import AiCode from "@/components/CustomMessageForms/AiCode";
+import AiAssist from "@/components/CustomMessageForms/AiAssist";
 
-function Chat() {
+const Chat = ({ user, secret }) => {
   const chatProps = useMultiChatLogic(
     import.meta.env.VITE_PROJECT_ID,
-    "testUser",
-    "1234"
+    user,
+    secret
   );
+
   return (
     <div style={{ flexBasis: "100%" }}>
       <MultiChatSocket {...chatProps} />
@@ -25,11 +28,20 @@ function Chat() {
           if (chatProps.chat?.title.startsWith("AiChat_")) {
             return <Ai props={props} activeChat={chatProps.chat} />;
           }
-          return <StandardMessageForm props={props} activeChat={chatProps} />;
+          if (chatProps.chat?.title.startsWith("AiCode_")) {
+            return <AiCode props={props} activeChat={chatProps.chat} />;
+          }
+          if (chatProps.chat?.title.startsWith("AiAssist_")) {
+            return <AiAssist props={props} activeChat={chatProps.chat} />;
+          }
+
+          return (
+            <StandardMessageForm props={props} activeChat={chatProps.chat} />
+          );
         }}
       />
     </div>
   );
-}
+};
 
 export default Chat;

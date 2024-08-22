@@ -16,6 +16,14 @@ router.post("/text", async (req, res) => {
         { role: "system", content: "You are a helpful assistant." },
         { role: "user", content: text },
       ],
+      temperature: 1,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      response_format: {
+        type: "text",
+      },
     });
 
     const message = response.data.choices[0].message.content;
@@ -46,23 +54,19 @@ router.post("/code", async (req, res) => {
   try {
     const { text, activeChatId } = req.body;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an assistant coder who responds with only code and no explanations.",
-        },
-        { role: "user", content: text },
-      ],
+    const response = await openai.createCompletion({
+      model: "code-davinci-002",
+      prompt: text,
+      temperature: 0.5,
+      max_tokens: 2048,
+      top_p: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0,
     });
-
-    const message = response.data.choices[0].message.content;
 
     await axios.post(
       `https://api.chatengine.io/chats/${activeChatId}/messages/`,
-      { text: message },
+      { text: response.data.choices[0].text },
       {
         headers: {
           "Project-ID": process.env.PROJECT_ID,
@@ -72,12 +76,9 @@ router.post("/code", async (req, res) => {
       }
     );
 
-    res.status(200).json({ text: message });
+    res.status(200).json({ text: response.data.choices[0].text });
   } catch (error) {
-    console.error(
-      "Error in /code endpoint",
-      error.response ? error.response.data.error : error.message
-    );
+    console.error("error", error.response.data.error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -86,23 +87,19 @@ router.post("/assist", async (req, res) => {
   try {
     const { text } = req.body;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a helpful assistant that serves to only complete user's thoughts or sentences.",
-        },
-        { role: "user", content: `Finish my thought: ${text}` },
-      ],
+    const response = await openai.createCompletion({
+      model: "gpt-3.5-turbo-instruct",
+      prompt: `Finish my thought: ${text}`,
+      temperature: 0.5,
+      max_tokens: 1024,
+      top_p: 1,
+      frequency_penalty: 0.5,
+      presence_penalty: 0,
     });
 
-    const message = response.data.choices[0].message.content;
-
-    res.status(200).json({ text: message });
+    res.status(200).json({ text: response.data.choices[0].text });
   } catch (error) {
-    console.error("Error in /assist endpoint", error.message);
+    console.error("error", error);
     res.status(500).json({ error: error.message });
   }
 });
