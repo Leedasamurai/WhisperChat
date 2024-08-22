@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import openAiRoutes from "./routes/openai.js";
 import authRoutes from "./routes/auth.js";
 
@@ -20,10 +20,10 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 /* OPEN AI CONFIGURATION */
-const configuration = new Configuration({
-  apiKey: process.env.OPEN_API_KEY,
+const client = new OpenAI({
+  apiKey: process.env["OPEN_API_KEY"],
 });
-export const openai = new OpenAIApi(configuration);
+export const openai = new OpenAI(client);
 
 /* ROUTES */
 app.use("/openai", openAiRoutes);
