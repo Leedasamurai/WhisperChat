@@ -37,3 +37,5 @@ const Ai = ({ props, activeChat }) => {
     />
   );
 };
+
+export default Ai;

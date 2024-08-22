@@ -21,7 +21,7 @@ app.use(cors());
 
 /* OPEN AI CONFIGURATION */
 const client = new OpenAI({
-  apiKey: process.env["OPEN_API_KEY"],
+  apiKey: process.env.OPEN_API_KEY,
 });
 export const openai = new OpenAI(client);
 

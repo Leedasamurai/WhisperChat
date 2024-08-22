@@ -6,7 +6,7 @@ import {
 } from "react-chat-engine-advanced";
 import Header from "@/components/customHeader";
 import StandardMessageForm from "@/components/CustomMessageForms/StandardMessageForm";
-import Ai from "@/components/CustomMessageForms/Ai";
+import Ai from "../CustomMessageForms/Ai";
 
 function Chat() {
   const chatProps = useMultiChatLogic(
