@@ -11,7 +11,7 @@ router.post("/text", async (req, res) => {
     const { text, activeChatId } = req.body;
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: "You are a helpful assistant." },
         { role: "user", content: text },
@@ -47,7 +47,7 @@ router.post("/code", async (req, res) => {
     const { text, activeChatId } = req.body;
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -87,7 +87,7 @@ router.post("/assist", async (req, res) => {
     const { text } = req.body;
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
