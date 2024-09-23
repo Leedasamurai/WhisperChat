@@ -1,4 +1,4 @@
-```md
+
 # WhisperChat
 
 WhisperChat is an AI-powered chat application that integrates OpenAI to provide advanced features such as sentence completion, code communication, and answering user questions. The app is built using a modern tech stack, with React and Vite on the frontend and Node.js with Express on the backend.
